@@ -8,7 +8,7 @@
 
     @vite(['resources/js/app.js'])
 
-    <title>Practica 4</title>
+    <title>Practica 5</title>
 
     <style>
         body {
@@ -58,7 +58,7 @@
 
         <section class="hero-section" style="background-color: #000000;">
             <div class="text-center">
-                <h1 class="hero-title">PRACTICA DE MENUS Y SUBMENUS</h1>
+                <h1 class="hero-title">PRACTICA 5</h1>
                 <h2 class="hero-subtitle">BIENVENIDO INVITADO <br> INICIA SESION O REGISTRATE</h2>
             </div>
         </section>
