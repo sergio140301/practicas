@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reticulas', function (Blueprint $table) {
-            $table->id();
-            $table->string('idReticula',15)->unique();
-            $table->string('Descripcion',200);
-            $table->datetime('fechaEnVigor')->unique();
-            $table->foreignId('carrera_id')->constrained();
-            $table->timestamps();
-        });
+   Schema::create('reticulas', function (Blueprint $table) {
+    $table->id();
+    $table->string('idReticula', 15)->unique();
+    $table->string('Descripcion', 200);
+    $table->datetime('fechaEnVigor')->unique();
+    $table->foreignId('carrera_id')->constrained();
+    $table->timestamps();
+});
+
     }
 
     /**

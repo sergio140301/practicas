@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Carrera;
+use App\Models\Reticula;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ReticulaFactory extends Factory
 {
+    protected $model = Reticula::class;
     /**
      * Define the model's default state.
      *

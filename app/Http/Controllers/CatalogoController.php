@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Depto;
+use App\Models\Plaza;
+use App\Models\Alumno;
+use App\Models\Puesto;
+use App\Models\Carrera;
 use App\Models\Catalogo;
 use Illuminate\Http\Request;
 
@@ -16,6 +21,7 @@ class CatalogoController extends Controller
 
         return view("catalogos.index", compact("catalogos"));
     }
+
 
     public function otraVista()
     {

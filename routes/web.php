@@ -11,6 +11,8 @@ use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ReticulaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProyectoPersonaleController;
 
 //RUTA DE ALUMNOS + AUTH
@@ -34,8 +36,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+
 // RUTA DE DEPARTAMENTOS + AUTH
 Route::middleware('auth')->group(function () {
+    Route::get('/catalogos.deptos', [AlumnoController::class, 'index'])->name('deptos.index');
 
     Route::resource('deptos', DeptoController::class);
     Route::get('/deptos.index', [DeptoController::class, 'index'])->name('deptos.index');
@@ -88,6 +93,73 @@ Route::middleware('auth')->group(function () {
     Route::delete('/puestos/destroy/{puesto}', [PuestoController::class, 'destroy'])->name('puestos.destroy');
 });
 
+//rutas de reticulas
+Route::resource('reticulas', ReticulaController::class);
+// RUTA DE RETICULAS + AUTH 
+Route::middleware('auth')->group(function () {
+    Route::get('/catalogos/reticulas', [ReticulaController::class, 'index'])->name('reticulas.index');
+
+    Route::get('/reticulas.create', [ReticulaController::class, 'create'])->name('reticulas.create');
+    Route::post('/reticulas.store', [ReticulaController::class, 'store'])->name('reticulas.store');
+
+    Route::get('/reticulas.show/{reticula}', [ReticulaController::class, 'show'])->name('reticulas.show');
+    Route::get('/reticulas.edit/{reticula}', [ReticulaController::class, 'edit'])->name('reticulas.edit');
+    Route::post('/reticulas.update/{reticula}', [ReticulaController::class, 'update'])->name('reticulas.update');
+
+    Route::get('/reticulas/eliminar/{reticula}', [ReticulaController::class, 'eliminar'])->name('reticulas.eliminar');
+    Route::delete('/reticulas/{reticula}', [ReticulaController::class, 'destroy'])->name('reticulas.destroy');
+});
+
+
+//ruta de materias
+use App\Http\Controllers\MateriaController;
+
+Route::resource('materias', MateriaController::class);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/materias', [MateriaController::class, 'index'])->name('materias.index');
+    Route::get('/materias/create', [MateriaController::class, 'create'])->name('materias.create');
+    Route::post('/materias', [MateriaController::class, 'store'])->name('materias.store');
+    Route::get('/materias/{materia}', [MateriaController::class, 'show'])->name('materias.show');
+    Route::get('/materias/{materia}/edit', [MateriaController::class, 'edit'])->name('materias.edit');
+    Route::put('/materias/{materia}', [MateriaController::class, 'update'])->name('materias.update');
+    Route::get('/materias/eliminar/{materia}', [MateriaController::class, 'eliminar'])->name('materias.eliminar');
+    Route::delete('/materias/{materia}', [MateriaController::class, 'destroy'])->name('materias.destroy');
+});
+
+//rutas de periodos
+use App\Http\Controllers\PeriodoController;
+
+Route::resource('periodos', PeriodoController::class);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/periodos', [PeriodoController::class, 'index'])->name('periodos.index');
+    Route::get('/periodos/create', [PeriodoController::class, 'create'])->name('periodos.create');
+    Route::post('/periodos', [PeriodoController::class, 'store'])->name('periodos.store');
+    Route::get('/periodos/{periodo}', [PeriodoController::class, 'show'])->name('periodos.show');
+    Route::get('/periodos/{periodo}/edit', [PeriodoController::class, 'edit'])->name('periodos.edit');
+    Route::put('/periodos/{periodo}', [PeriodoController::class, 'update'])->name('periodos.update');
+    Route::get('/periodos/eliminar/{periodo}', [PeriodoController::class, 'eliminar'])->name('periodos.eliminar');
+    Route::delete('/periodos/{periodo}', [PeriodoController::class, 'destroy'])->name('periodos.destroy');
+});
+
+
+//reticulas
+Route::middleware('auth')->group(function () {
+    Route::get('/reticulas', [ReticulaController::class, 'index'])->name('reticulas.index');
+    Route::get('/reticulas/create', [ReticulaController::class, 'create'])->name('reticulas.create');
+    Route::post('/reticulas', [ReticulaController::class, 'store'])->name('reticulas.store');
+    Route::get('/reticulas/{reticula}', [ReticulaController::class, 'show'])->name('reticulas.show');
+    Route::get('/reticulas/{reticula}/edit', [ReticulaController::class, 'edit'])->name('reticulas.edit');
+    Route::put('/reticulas/{reticula}', [ReticulaController::class, 'update'])->name('reticulas.update');
+    Route::get('/reticulas/eliminar/{reticula}', [ReticulaController::class, 'eliminar'])->name('reticulas.eliminar');
+    Route::delete('/reticulas/{reticula}', [ReticulaController::class, 'destroy'])->name('reticulas.destroy');
+});
+
+
+
 //RUTA DE PLAZAS + AUTH
 Route::middleware('auth')->group(function () {
     Route::get('/plazas.index', [PlazaController::class, 'index'])->name('plazas.index');
@@ -111,6 +183,12 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
 
 Route::get('/catalogos.otraVista', [CatalogoController::class, 'otraVista'])->name('catalogos.otraVista');
+Route::get('/catalogos/submenu', [CatalogoController::class, 'submenu'])->name('catalogos.submenu');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/catalogos/submenu', [CatalogoController::class, 'submenu'])->name('catalogos.submenu');
+});
+
 
 });
 

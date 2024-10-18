@@ -11,6 +11,25 @@
         {{ session('success') }}
     </div>
 @endif
+
+<div class="container text-center mt-5">
+  <h1 class="custom-title">Motor de búsqueda de plazas</h1>
+</div>
+
+<form class="d-flex my-2 my-lg-0" method="GET" action="{{ route('plazas.index') }}">
+  <input
+      class="form-control me-sm-2"
+      type="text"
+      name="txtBuscar"  
+      placeholder="Buscar plaza..."
+      value="{{ request('txtBuscar') }}" 
+  />
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      Buscar
+  </button>
+</form>
+
+
     <h1 class="custom-title">¡Bienvenido a la pagina de plazas!</h1>
   </div>
   

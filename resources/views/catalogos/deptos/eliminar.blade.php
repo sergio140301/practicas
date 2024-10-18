@@ -1,10 +1,10 @@
 @extends('inicio2')
 
 @section('contenido1')
-    @include('deptos/tablahtml')
+    @include('catalogos/deptos/tablahtml')
 @endsection
 
-@section('contenido2')
+@section('contenido4000')
 
     <div class="row justify-content-center bg-danger-40">
         <div class="col-md-8 col-lg-6">

@@ -1,10 +1,10 @@
 @extends('inicio2')
 
 @section('contenido1')
-    @include('deptos.tablahtml')  <!-- Cambié la ruta a la tabla de departamentos -->
+    @include('catalogos.deptos.tablahtml')  
 @endsection
 
-@section('contenido2')
+@section('contenido4000')
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card">
@@ -14,6 +14,8 @@
                             Insertando datos nuevos
                         @elseif ($accion == 'actualizar')
                             Actualizando datos
+                             @elseif ($accion == 'ver')
+                            Ver datos
                         @endif
                     </h4>
                 </div>

@@ -3,63 +3,99 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reticula;
+use App\Models\Carrera;
 use Illuminate\Http\Request;
 
 class ReticulaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public $validado;
+
+    public function __construct()
+    {
+        $this->validado = [
+            'idReticula' => 'required|string|max:15|unique:reticulas,idReticula',
+            'Descripcion' => 'required|string|max:200',
+            'fechaEnVigor' => 'required|date',
+            'carrera_id' => 'required|exists:carreras,id', // Validar existencia de carrera
+        ];
+    }
+
     public function index()
     {
-        //
+        $txtBuscar = request('txtBuscar', '');
+
+        $reticulas = Reticula::with('carrera')
+            ->when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('Descripcion', 'like', '%' . $txtBuscar . '%');
+            })
+            ->paginate(5);
+
+        return view("catalogos.reticulas.index", compact("reticulas", "txtBuscar"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $carreras = Carrera::all();
+        $reticulas = Reticula::paginate(5);
+        $reticula = new Reticula;
+        $accion = "crear";
+        $txtbtn = "guardar";
+        $desabilitado ="";
+
+        return view("catalogos.reticulas.frm", compact("reticulas", "reticula", "accion", "txtbtn", "carreras", "desabilitado"));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validado = $request->validate($this->validado);
+        Reticula::create($validado);
+    
+        return redirect()->route('reticulas.index')->with('success', 'Retícula creada con éxito');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Reticula $reticula)
+    
+       public function show(Reticula $reticula)
     {
-        //
+        $reticulas = Reticula::paginate(5);
+        $accion = "ver";
+        $txtbtn = "ver";
+        $desabilitado = "disabled";
+        $carreras = Carrera::all();
+        return view('catalogos.reticulas.frm', compact('reticulas', 'reticula', 'accion', 'txtbtn', 'desabilitado', 'carreras'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Reticula $reticula)
     {
-        //
+        $reticulas = Reticula::paginate(5);
+        $carreras = Carrera::all(); 
+        $accion = "actualizar"; 
+        $txtbtn = "Actualizar Datos"; 
+        $desabilitado = ""; 
+    
+        return view('catalogos.reticulas.frm', compact('reticulas','reticula', 'accion', 'txtbtn', 'carreras', 'desabilitado'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Reticula $reticula)
+    
+    public function update(Request $request, $idReticula)
     {
-        //
+        $validado = $request->validate($this->validado);
+    
+        $reticula = Reticula::findOrFail($idReticula);
+
+        $reticula->update($validado);
+
+        return redirect()->route('reticulas.index')->with('success', 'Retícula modificada exitosamente.');
+    }
+    
+    
+
+    public function eliminar(Reticula $reticula)
+    {
+        $reticulas = Reticula::paginate(5);
+        return view('catalogos.reticulas.eliminar', compact('reticulas', 'reticula'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Reticula $reticula)
     {
-        //
+        $reticula->delete();
+        return redirect()->route('reticulas.index')->with('success', 'Retícula eliminada exitosamente.');
     }
 }

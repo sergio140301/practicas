@@ -19,10 +19,16 @@ class PlazaController extends Controller
 
     public function index()
     {
-        $plazas = Plaza::paginate(5);
-        return view("catalogos.plazas.index", compact("plazas"));
+        $txtBuscar = request('txtBuscar', ''); // Inicializa con un valor por defecto
+    
+        $plazas = Plaza::when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('nombreplaza', 'like', '%' . $txtBuscar . '%'); // Filtra por nombre de plaza
+            })
+            ->paginate(5);
+    
+        return view("catalogos.plazas.index", compact("plazas", "txtBuscar")); // Pasa $txtBuscar a la vista
     }
-
+    
     public function create()
     {
         $plazas = Plaza::paginate(5);

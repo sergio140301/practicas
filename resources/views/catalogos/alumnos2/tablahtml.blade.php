@@ -13,6 +13,23 @@
         </div>
     @endif
 
+    <div class="container text-center mt-5">
+        <h1 class="custom-title">Motor de busqueda de alumnos</h1>
+    </div>
+ {{-- la variable requets va y busca el objeto  --}}
+ <form class="d-flex my-2 my-lg-0" method="GET" action="{{ route('alumnos.index') }}">
+    <input
+        class="form-control me-sm-2"
+        type="text"
+        name="txtBuscar"  
+        placeholder="Buscar alumno......"
+        value="{{ request('txtBuscar') }}" 
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        Search
+    </button>
+</form>
+
     <div class="text-center mt-3">
         <h1 class="custom-title">¡Bienvenido a la página de alumnos!</h1>
     </div>
@@ -32,6 +49,7 @@
                     <th scope="col">Sexo</th>
                     <th scope="col">Email</th>
                     <th scope="col">Carrera</th>
+                    <th scope="col">Departamento</th>
                     <th scope="col">Creado</th>
                     <th scope="col">Actualizado</th>
                     <th scope="col"></th>
@@ -50,6 +68,7 @@
                         <td>{{ $alumno->sexo }}</td>
                         <td>{{ $alumno->email }}</td>
                         <td>{{ $alumno->carrera->nombreCarrera ?? 'Sin Carrera' }}</td>
+                        <td>{{ $alumno->carrera->depto->nombreDepto ?? 'Sin Departamento' }}</td>
                         <td>{{ $alumno->created_at }}</td>
                         <td>{{ $alumno->updated_at }}</td>
                         <td><a href="{{ route('alumnos.show', $alumno->id) }}"><img src="{{ asset('img/icono-ver.png') }}" width="50px"></a></td>

@@ -21,10 +21,16 @@ class PuestoController extends Controller
 
     public function index()
     {
-        $puestos = Puesto::paginate(5);
-        return view("catalogos.puestos.index", compact("puestos"));
+        $txtBuscar = request('txtBuscar', ''); // Inicializa con un valor por defecto
+    
+        $puestos = Puesto::when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('nombrepuesto', 'like', '%' . $txtBuscar . '%'); // Filtra por nombre de puesto
+            })
+            ->paginate(5);
+    
+        return view("catalogos.puestos.index", compact("puestos", "txtBuscar")); // Pasa $txtBuscar a la vista
     }
-
+    
     public function create()
     {
         $puestos = Puesto::paginate(5);

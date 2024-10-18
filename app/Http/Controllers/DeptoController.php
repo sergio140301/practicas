@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depto;
+use App\Models\Carrera;
 use Illuminate\Http\Request;
 
 class DeptoController extends Controller
@@ -12,8 +13,15 @@ class DeptoController extends Controller
      */
     public function index()
     {
-        $departamentos = Depto::paginate(5);  // Cambia esto según tu modelo
-        return view("deptos.index", compact("departamentos"));  // Asegúrate de que la vista esté correctamente referenciada
+        $txtBuscar = request('txtBuscar', ''); 
+    
+        $departamentos = Depto::with('carreras.alumnos')
+            ->when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('nombreDepto', 'like', '%' . $txtBuscar . '%'); 
+            })
+            ->paginate(5);
+    
+        return view("catalogos.deptos.index", compact("departamentos", "txtBuscar"));
     }
 
     /**
@@ -27,7 +35,7 @@ class DeptoController extends Controller
         $accion = "crear"; 
         $txtbtn = "guardar"; 
     
-        return view("deptos.frm", compact("departamentos", "depto", "desabilitado", "txtbtn", "accion"));
+        return view("catalogos.deptos.frm", compact("departamentos", "depto", "desabilitado", "txtbtn", "accion"));
     }
     
 
@@ -55,18 +63,19 @@ class DeptoController extends Controller
         $accion = "actualizar";
         $txtbtn = "Eliminar Datos";
         $desabilitado = "disabled";
-        return view('deptos.frm', compact('departamentos', "depto" ,'accion', 'txtbtn', 'desabilitado'));
+        return view('catalogos.deptos.frm', compact('departamentos', "depto" ,'accion', 'txtbtn', 'desabilitado'));
     }
 
-public function edit(Depto $depto)
-{
-    $departamentos = Depto::paginate(5);
-    $accion = "actualizar";
-    $txtbtn = "Actualizar Datos";
-    $desabilitado = "";
-    return view('deptos.frm', compact('departamentos', 'depto', 'accion', 'desabilitado', 'txtbtn'));
-}
-
+    public function edit(Depto $depto)
+    {
+        $departamentos = Depto::all(); 
+        $carrera = Carrera::where('depto_id', $depto->idDepto)->first(); 
+        $accion = "actualizar";
+        $txtbtn = "Actualizar Datos";
+        $desabilitado = ""; 
+        return view('catalogos.carreras.frm', compact('departamentos', 'carrera', 'accion', 'desabilitado', 'txtbtn'));
+    }
+    
     
 
     /**
@@ -91,7 +100,7 @@ public function edit(Depto $depto)
     public function eliminar(Depto $depto)
     {
         $departamentos = Depto::paginate(5);
-        return view('deptos.eliminar', compact('departamentos', "depto"));
+        return view('catalogos.deptos.eliminar', compact('departamentos', "depto"));
     }
 
     public function destroy(Depto $depto)

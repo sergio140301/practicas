@@ -18,6 +18,7 @@ class Depto extends Model
         return $this->hasMany(Carrera::class);
     }
 
+   
     protected $fillable = [
         'idDepto',
         'nombreDepto',

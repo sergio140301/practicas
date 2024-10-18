@@ -26,20 +26,27 @@ class AlumnoController extends Controller
 
   public function index()
   {
-
-      $alumnos = Alumno::with('carrera')->paginate(5);
-      return view("catalogos.alumnos2.index", compact("alumnos"));
+      $txtBuscar = request('txtBuscar', '');
+  
+      $alumnos = Alumno::with('carrera.depto')
+          ->when($txtBuscar, function ($query) use ($txtBuscar) {
+              return $query->where('nombre', 'like', '%' . $txtBuscar . '%'); 
+          })
+          ->paginate(5);
+  
+      return view("catalogos.alumnos2.index", compact("alumnos", "txtBuscar")); 
   }
 
   public function create()
   {
       $carreras = Carrera::all(); 
+      $depto = \App\Models\Depto::all(); 
       $alumnos = Alumno::Paginate(5);
       $alumno = new Alumno;
       $desabilitado = "";
       $accion = "crear";
       $txtbtn = "guardar";
-      return view("catalogos.alumnos2.frm", compact("alumnos", "alumno", "accion", "txtbtn", 'desabilitado', 'carreras'));
+      return view("catalogos.alumnos2.frm", compact("alumnos", "alumno", "accion", "txtbtn", 'desabilitado', 'carreras', 'depto'));
 
   }
   public function store(Request $request)
@@ -59,24 +66,26 @@ class AlumnoController extends Controller
   public function show(Alumno $alumno)
   {
       $alumnos = Alumno::paginate(5);
-      $carreras = \App\Models\Carrera::all(); // Obtener todas las carreras
+      $carreras = \App\Models\Carrera::all(); 
+      $depto = \App\Models\Depto::all(); 
       $accion = "ver";
       $txtbtn = "ver";
       $desabilitado = "disabled";
   
-      return view('catalogos.alumnos2.frm', compact('alumnos', 'alumno', 'carreras', 'accion', 'txtbtn', 'desabilitado'));
+      return view('catalogos.alumnos2.frm', compact('alumnos', 'alumno', 'carreras', 'accion', 'txtbtn', 'desabilitado', 'depto'));
   }
   
 
   public function edit(Alumno $alumno)
   {
       $alumnos = Alumno::paginate(5);
-      $carreras = \App\Models\Carrera::all(); // Obtener todas las carreras
+      $carreras = \App\Models\Carrera::all(); 
+      $depto = \App\Models\Depto::all(); 
       $accion = "actualizar";
       $txtbtn = "Actualizar Datos";
       $desabilitado = "";
   
-      return view("catalogos.alumnos2.frm", compact('alumnos', 'alumno', 'carreras', 'accion', 'txtbtn', 'desabilitado'));
+      return view("catalogos.alumnos2.frm", compact('alumnos', 'alumno', 'carreras', 'accion', 'txtbtn', 'desabilitado', 'depto'));
   }
   
 

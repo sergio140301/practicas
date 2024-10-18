@@ -1,10 +1,10 @@
 @extends('inicio2')
 
 @section('contenido1')
-    @include('carreras.tablahtml')
+    @include('catalogos.carreras.tablahtml')
 @endsection
 
-@section('contenido2')
+@section('contenido4000')
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card">
@@ -14,6 +14,8 @@
                             Insertando datos nuevos
                         @elseif ($accion == 'actualizar')
                             Actualizando datos
+                            @elseif ($accion == 'ver')
+                            Ver datos
                         @endif
                     </h4>
                 </div>
@@ -23,7 +25,7 @@
                     action="@if ($accion == 'crear') 
                                 {{ route('carreras.store') }} 
                             @else 
-                                {{ route('carreras.update', $carrera->idCarrera) }} 
+                                {{ route('carreras.update', $carrera->id) }} 
                             @endif">
                     
                         @csrf
@@ -40,7 +42,7 @@
                                     <p>Error en el ID de Carrera: {{ $message }}</p>
                                 </ul>
                             @enderror
-                            <div class="form-text">Escribe el ID de la Carrera</div>
+                            <div class="form-text">Escribe el ID de la Carrera *3 numeros y 7 letras*</div>
                         </div> 
 
                     
@@ -83,11 +85,9 @@
 
                         <div class="mb-3">
                             <label for="depto_id" class="form-label">Departamento</label>
-                            <select name="depto_id" class="form-control" id="depto_id" {{$desabilitado}}>
+                            <select name="depto_id" class="form-control" id="depto_id" required>
                                 @foreach ($departamentos as $depto)
-                                    <option value="{{ $depto->idDepto }}" {{ old('depto_id', $carrera->depto_id ?? '') == $depto->idDepto ? 'selected' : '' }}>
-                                        {{ $depto->nombreDepto }}
-                                    </option>
+                                    <option value="{{ $depto->id }}">{{ $depto->nombreDepto }}</option>
                                 @endforeach
                             </select>
                             @error('depto_id')

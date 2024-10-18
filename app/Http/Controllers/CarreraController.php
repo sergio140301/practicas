@@ -12,10 +12,16 @@ class CarreraController extends Controller
      */
     public function index()
     {
-        $carreras = Carrera::paginate(5);  // Cambia esto según tu modelo
-        return view("catalogos.index", compact("carreras"));  // Asegúrate de que la vista esté correctamente referenciada
+        $txtBuscar = request('txtBuscar', ''); 
+    
+        $carreras = Carrera::when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('nombreCarrera', 'like', '%' . $txtBuscar . '%'); 
+            })
+            ->paginate(5);
+    
+        return view("catalogos.carreras.index", compact("carreras", "txtBuscar")); 
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -33,34 +39,33 @@ class CarreraController extends Controller
 
 
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nombreCarrera' => 'required|string|max:200|unique:carreras',
-            'nombreMediano' => 'nullable|string|max:50|unique:carreras',
-            'nombreCorto' => 'nullable|string|max:5|unique:carreras',
-            'depto_id' => 'required|exists:deptos,id', // Verificación correcta
-        ]);
-    
-        // Generar un idCarrera único
-        $numeroBase = 'C' . str_pad((Carrera::count() + 1), 3, '0', STR_PAD_LEFT);
-        $letrasAleatorias = strtoupper(substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 3));
-        $validatedData['idCarrera'] = $numeroBase . $letrasAleatorias;
-    
-        // Crear la carrera
-        Carrera::create($validatedData);
-    
-        return redirect()->route('carreras.index')->with('success', 'Carrera creada con éxito');
-    }
+{
+    $validatedData = $request->validate([
+        'nombreCarrera' => 'required|string|max:200|unique:carreras',
+        'nombreMediano' => 'nullable|string|max:50|unique:carreras',
+        'nombreCorto' => 'nullable|string|max:5|unique:carreras',
+        'depto_id' => 'required|exists:deptos,id', 
+    ]);
+
+    // Generar un idCarrera único
+    $numeroBase = 'C' . str_pad((Carrera::count() + 1), 3, '0', STR_PAD_LEFT);
+    $letrasAleatorias = strtoupper(substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 3));
+    $validatedData['idCarrera'] = $numeroBase . $letrasAleatorias;
+
+    Carrera::create($validatedData);
+
+    return redirect()->route('carreras.index')->with('success', 'Carrera creada con éxito');
+}
     
 
     public function show(Carrera $carrera)
     {
         $carreras = Carrera::paginate(5);
-        $departamentos = \App\Models\Depto::all(); // Obtener todos los departamentos
-        $accion = "actualizar";
-        $txtbtn = "Eliminar Datos";
+        $departamentos = \App\Models\Depto::all(); 
+        $accion = "ver";
+        $txtbtn = "ver";
         $desabilitado = "disabled";
-        return view('carreras.frm', compact('carreras', "carrera", 'accion', 'txtbtn', 'desabilitado', 'departamentos'));
+        return view('catalogos.carreras.frm', compact('carreras', "carrera", 'accion', 'txtbtn', 'desabilitado', 'departamentos'));
     }
 
     public function edit(Carrera $carrera)
@@ -70,7 +75,7 @@ class CarreraController extends Controller
         $accion = "actualizar";
         $txtbtn = "Actualizar Datos";
         $desabilitado = "";
-        return view('carreras.frm', compact('carreras', 'carrera', 'accion', 'desabilitado', 'txtbtn', 'departamentos'));
+        return view('catalogos.carreras.frm', compact('carreras', 'carrera', 'accion', 'desabilitado', 'txtbtn', 'departamentos'));
     }
 
     /**
@@ -78,8 +83,8 @@ class CarreraController extends Controller
      */
     public function update(Request $request, Carrera $carrera)
     {
-        // Validar los datos entrantes
-        $validatedData = $request->validate([
+        
+        $validando = $request->validate([
             'nombreCarrera' => 'required|string|max:50',
             'nombreMediano' => 'nullable|string|max:7',
             'nombreCorto' => 'nullable|string|max:5',
@@ -87,7 +92,7 @@ class CarreraController extends Controller
         ]);
 
         // Actualizar la carrera
-        $carrera->update($validatedData);
+        $carrera->update($validando);
 
         return redirect()->route('carreras.index')->with('success', 'Carrera modificada exitosamente.');
     }

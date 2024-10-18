@@ -1,4 +1,4 @@
-@section('contenido3000')
+
 <style>
     .custom-title {
         color: #343a40;
@@ -12,6 +12,23 @@
             {{ session('success') }}
         </div>
     @endif
+    <div class="container text-center mt-5">
+        <h1 class="custom-title">Motor de búsqueda de carreras</h1>
+    </div>
+    
+    <form class="d-flex my-2 my-lg-0" method="GET" action="{{ route('carreras.index') }}">
+        <input
+            class="form-control me-sm-2"
+            type="text"
+            name="txtBuscar"  
+            placeholder="Buscar carrera..."
+            value="{{ request('txtBuscar') }}" 
+        />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Buscar
+        </button>
+    </form>
+    
 
     <div class="container text-center mt-5">
         <h1 class="custom-title">¡Bienvenido a la página de carreras!</h1>
@@ -44,12 +61,12 @@
                         <td>{{ $carrera->nombreCarrera }}</td>
                         <td>{{ $carrera->nombreMediano }}</td>
                         <td>{{ $carrera->nombreCorto }}</td>
-                        <td>{{ $carrera->depto->idDepto ?? 'Sin Departamento' }}</td>
+                        <td>{{ $carrera->depto->nombreDepto ?? 'Sin Departamento' }}</td>
                         <td>{{ $carrera->created_at }}</td>
                         <td>{{ $carrera->updated_at }}</td>
-                        <td><a href="{{ route('carreras.show', $carrera->idCarrera) }}"><img src="{{ asset('img/icono-ver.png') }}" width="50px"></a></td>
-                        <td><a href="{{ route('carreras.eliminar', $carrera->idCarrera) }}"><img src="{{ asset('img/icono-delete.png') }}" width="50px"></a></td>
-                        <td><a href="{{ route('carreras.edit', $carrera->idCarrera) }}"><img src="{{ asset('img/icono-editar.png') }}" width="50px"></a></td>
+                        <td><a href="{{ route('carreras.show', $carrera->id) }}"><img src="{{ asset('img/icono-ver.png') }}" width="50px"></a></td>
+                        <td><a href="{{ route('carreras.eliminar', $carrera->id) }}"><img src="{{ asset('img/icono-delete.png') }}" width="50px"></a></td>
+                        <td><a href="{{ route('carreras.edit', $carrera->id) }}"><img src="{{ asset('img/icono-editar.png') }}" width="50px"></a></td>
                     </tr>
                 @endforeach
             </tbody>
@@ -58,4 +75,3 @@
         {{ $carreras->links() }}
     </div>
 </div>
-@endsection

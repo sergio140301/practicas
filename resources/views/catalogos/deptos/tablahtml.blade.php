@@ -13,6 +13,23 @@
     @endif
 
     <div class="container text-center mt-5">
+        <h1 class="custom-title">Motor de busqueda de departamentos</h1>
+    </div>
+ {{-- la variable requets va y busca el objeto  --}}
+ <form class="d-flex my-2 my-lg-0" method="GET" action="{{ route('deptos.index') }}">
+    <input
+        class="form-control me-sm-2"
+        type="text"
+        name="txtBuscar"  
+        placeholder="Buscar departamento...."
+        value="{{ request('txtBuscar') }}" 
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        Search
+    </button>
+</form>
+
+    <div class="container text-center mt-5">
         <h1 class="custom-title">¡Bienvenido a la página de departamentos!</h1>
     </div>
     <div class="container mt-12 text-center">
@@ -24,10 +41,10 @@
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">ID Depto</th> <!-- Nuevo campo -->
+                    <th scope="col">ID Depto</th> 
                     <th scope="col">Nombre del Depto</th>
-                    <th scope="col">Nombre Mediano</th> <!-- Nuevo campo -->
-                    <th scope="col">Nombre Corto</th> <!-- Nuevo campo -->
+                    <th scope="col">Nombre Mediano</th> 
+                    <th scope="col">Nombre Corto</th> 
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -48,7 +65,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{-- Botones de paginación --}}
+       
         {{ $departamentos->links() }}
     </div>
 </div>
