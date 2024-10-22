@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Depto;
+use App\Models\Alumno;
 use App\Models\Materia;
 use App\Models\Reticula;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ class Carrera extends Model
 
     public function alumnos()
     {
-        return $this->hasMany(alumno::class);
+        return $this->hasMany(Alumno::class);
     }
 
 
