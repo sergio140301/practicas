@@ -21,12 +21,15 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ $accion == 'crear' ? route('reticulas.store') : route('reticulas.update', $reticula->idReticula) }}">
+                    <form method="POST" action="{{ $accion == 'crear' ? route('reticulas.store') : route('reticulas.update', $reticula->id) }}">
                         @csrf
                         @if ($accion == 'actualizar')
                             @method('PUT')
                         @endif
-                    
+                        @if ($accion == 'eliminar')
+                            @method('DELETE')
+                        @endif
+
                         <div class="mb-3">
                             <label for="idReticula" class="form-label">ID Retícula</label>
                             <input type="text" name="idReticula" class="form-control" maxlength="15" id="idReticula"
@@ -54,6 +57,7 @@
                         <div class="mb-3">
                             <label for="carrera_id" class="form-label">Carrera</label>
                             <select name="carrera_id" class="form-control" id="carrera_id" {{ $desabilitado }}>
+                                <option value="" disabled selected>Selecciona una carrera</option>
                                 @foreach ($carreras as $carrera)
                                     <option value="{{ $carrera->id }}" {{ old('carrera_id', $reticula->carrera_id ?? '') == $carrera->id ? 'selected' : '' }}>
                                         {{ $carrera->nombreCarrera }}

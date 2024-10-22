@@ -41,6 +41,7 @@
                     <th scope="col">ID Retícula</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Nombre de la Carrera</th>
+                    <th scope="col">Fecha en Vigor</th>
                     <th scope="col">Creado</th>
                     <th scope="col">Actualizado</th>
                     <th scope="col"></th>
@@ -54,6 +55,7 @@
                         <td scope="row">{{ $reticula->idReticula }}</td>
                         <td>{{ $reticula->Descripcion }}</td>
                         <td>{{ $reticula->carrera->nombreCarrera }}</td>
+                        <td>{{ $reticula->fechaEnVigor}}</td>
                         <td>{{ $reticula->created_at }}</td>
                         <td>{{ $reticula->updated_at }}</td>
                         

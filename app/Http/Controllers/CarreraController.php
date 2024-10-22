@@ -70,8 +70,11 @@ class CarreraController extends Controller
 
     public function edit(Carrera $carrera)
     {
-        $carreras = Carrera::paginate(5);
         $departamentos = \App\Models\Depto::all(); // Obtener todos los departamentos
+
+          
+        $carreras = Carrera::paginate(5);
+        
         $accion = "actualizar";
         $txtbtn = "Actualizar Datos";
         $desabilitado = "";
@@ -83,12 +86,12 @@ class CarreraController extends Controller
      */
     public function update(Request $request, Carrera $carrera)
     {
-        
+      
         $validando = $request->validate([
             'nombreCarrera' => 'required|string|max:50',
             'nombreMediano' => 'nullable|string|max:7',
             'nombreCorto' => 'nullable|string|max:5',
-            'depto_id' => 'required|exists:deptos,idDepto',
+            'idDepto' => 'required|exists:deptos,idDepto',
         ]);
 
         // Actualizar la carrera

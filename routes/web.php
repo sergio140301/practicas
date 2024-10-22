@@ -146,7 +146,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-//reticulas
+// RUTAS DE RETICULAS
 Route::middleware('auth')->group(function () {
     Route::get('/reticulas', [ReticulaController::class, 'index'])->name('reticulas.index');
     Route::get('/reticulas/create', [ReticulaController::class, 'create'])->name('reticulas.create');
@@ -157,7 +157,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/reticulas/eliminar/{reticula}', [ReticulaController::class, 'eliminar'])->name('reticulas.eliminar');
     Route::delete('/reticulas/{reticula}', [ReticulaController::class, 'destroy'])->name('reticulas.destroy');
 });
-
 
 
 //RUTA DE PLAZAS + AUTH

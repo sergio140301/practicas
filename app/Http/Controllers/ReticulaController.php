@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reticula;
 use App\Models\Carrera;
+use App\Models\Reticula;
 use Illuminate\Http\Request;
 
 class ReticulaController extends Controller
@@ -14,77 +14,79 @@ class ReticulaController extends Controller
     {
         $this->validado = [
             'idReticula' => 'required|string|max:15|unique:reticulas,idReticula',
-            'Descripcion' => 'required|string|max:200',
+            'Descripcion' => 'required|string|max:255',
             'fechaEnVigor' => 'required|date',
-            'carrera_id' => 'required|exists:carreras,id', // Validar existencia de carrera
+            'carrera_id' => 'required|exists:carreras,id', // Asegúrate de que la carrera exista
         ];
     }
 
     public function index()
     {
-        $txtBuscar = request('txtBuscar', '');
+        $txtBuscar = request('txtBuscar', ''); // Inicializa con un valor por defecto
 
-        $reticulas = Reticula::with('carrera')
-            ->when($txtBuscar, function ($query) use ($txtBuscar) {
-                return $query->where('Descripcion', 'like', '%' . $txtBuscar . '%');
+        $reticulas = Reticula::when($txtBuscar, function ($query) use ($txtBuscar) {
+                return $query->where('Descripcion', 'like', '%' . $txtBuscar . '%'); // Filtra por descripción
             })
             ->paginate(5);
 
-        return view("catalogos.reticulas.index", compact("reticulas", "txtBuscar"));
+        return view("catalogos.reticulas.index", compact("reticulas", "txtBuscar")); // Pasa $txtBuscar a la vista
     }
 
     public function create()
     {
-        $carreras = Carrera::all();
         $reticulas = Reticula::paginate(5);
-        $reticula = new Reticula;
+        $reticula = new Reticula; 
         $accion = "crear";
         $txtbtn = "guardar";
-        $desabilitado ="";
+        $desabilitado = "";
+        $carreras = Carrera::all(); // Asegúrate de que estás importando el modelo Carrera
 
-        return view("catalogos.reticulas.frm", compact("reticulas", "reticula", "accion", "txtbtn", "carreras", "desabilitado"));
+        return view("catalogos.reticulas.frm", compact("reticulas", "reticula", "accion", "txtbtn", "desabilitado", "carreras"));
     }
 
     public function store(Request $request)
     {
+        // Validar datos
         $validado = $request->validate($this->validado);
         Reticula::create($validado);
-    
+
         return redirect()->route('reticulas.index')->with('success', 'Retícula creada con éxito');
     }
-    
-       public function show(Reticula $reticula)
+
+    public function show(Reticula $reticula)
     {
         $reticulas = Reticula::paginate(5);
         $accion = "ver";
         $txtbtn = "ver";
         $desabilitado = "disabled";
-        $carreras = Carrera::all();
-        return view('catalogos.reticulas.frm', compact('reticulas', 'reticula', 'accion', 'txtbtn', 'desabilitado', 'carreras'));
+        return view('catalogos.reticulas.frm', compact('reticulas', 'reticula', 'accion', 'txtbtn', 'desabilitado'));
     }
 
     public function edit(Reticula $reticula)
     {
         $reticulas = Reticula::paginate(5);
-        $carreras = Carrera::all(); 
-        $accion = "actualizar"; 
-        $txtbtn = "Actualizar Datos"; 
-        $desabilitado = ""; 
-    
-        return view('catalogos.reticulas.frm', compact('reticulas','reticula', 'accion', 'txtbtn', 'carreras', 'desabilitado'));
+        $accion = "actualizar";
+        $desabilitado = "";
+        $txtbtn = "Actualizar Datos";
+        $carreras = Carrera::all(); // Asegúrate de que estás importando el modelo Carrera
+
+        return view('catalogos.reticulas.frm', compact('reticulas', 'reticula', 'accion', 'txtbtn', 'desabilitado', 'carreras'));
     }
-    
-    public function update(Request $request, $idReticula)
+
+    public function update(Request $request, Reticula $reticula)
     {
         $validado = $request->validate($this->validado);
     
-        $reticula = Reticula::findOrFail($idReticula);
-
-        $reticula->update($validado);
-
-        return redirect()->route('reticulas.index')->with('success', 'Retícula modificada exitosamente.');
+        try {
+            $reticula->update($validado);
+            return redirect()->route('reticulas.index')->with('success', 'Retícula modificada exitosamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Error de duplicado
+                return redirect()->back()->withErrors(['fechaEnVigor' => 'La fecha en vigor ya existe.'])->withInput();
+            }
+            // Manejar otros errores
+        }
     }
-    
     
 
     public function eliminar(Reticula $reticula)

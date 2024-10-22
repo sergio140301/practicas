@@ -84,19 +84,22 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="depto_id" class="form-label">Departamento</label>
-                            <select name="depto_id" class="form-control" id="depto_id" required>
+                            <label for="idDepto" class="form-label">Departamento</label>
+                            <select name="idDepto" class="form-control" id="idDepto" required>
                                 @foreach ($departamentos as $depto)
-                                    <option value="{{ $depto->id }}">{{ $depto->nombreDepto }}</option>
+                                    <option value="{{ $depto->idDepto }}" {{ (old('idDepto', $carrera->depto_id ?? '') == $depto->idDepto) ? 'selected' : '' }}>
+                                        {{ $depto->nombreDepto }}
+                                    </option>
                                 @endforeach
                             </select>
-                            @error('depto_id')
+                            @error('idDepto')
                                 <ul class="list-unstyled text-danger">
                                     <p>Error en el departamento: {{ $message }}</p>
                                 </ul>
                             @enderror
                             <div class="form-text">Selecciona el departamento de la carrera</div>
                         </div>
+                        
 
                         <button type="submit" class="btn btn-primary">{{ $txtbtn }}</button>
                     </form>

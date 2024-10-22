@@ -14,7 +14,7 @@ class Reticula extends Model
     protected $fillable = ['idReticula', 'Descripcion', 'fechaEnVigor', 'carrera_id'];
 
     // Define la relación con el modelo Carrera
-    public function carrera()
+    public function Carrera()
     {
         return $this->belongsTo(Carrera::class, 'carrera_id');
     }

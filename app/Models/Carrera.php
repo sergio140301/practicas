@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Depto;
+use App\Models\Materia;
+use App\Models\Reticula;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +22,19 @@ class Carrera extends Model
         return $this->hasMany(alumno::class);
     }
 
+
+    public function reticulas()
+    {
+        return $this->hasMany(Reticula::class);
+    }
+
+
+ public function materias()
+    {
+        return $this->hasMany(Materia::class);
+    }
+
+    
 // Define la relación con Departamento
 public function depto(): BelongsTo
 {
